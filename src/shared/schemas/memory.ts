@@ -52,6 +52,9 @@ export const MemorySettingsExtendedSchema = z
     primaryBackend: z.string().optional(),
     fallbackBackends: z.array(z.string()).optional(),
     backendConfigs: z.record(z.string(), z.record(z.string(), z.unknown())).optional(),
+    // Session isolation opt-in: scope retrieval to `x-omniroute-session-id` when present,
+    // instead of pooling every session under the owning API key. See toMemoryRetrievalConfig().
+    sessionScopeEnabled: z.boolean().optional(),
   })
   .strict();
 

@@ -21,6 +21,13 @@ export interface MemorySettings {
   primaryBackend: string;
   fallbackBackends: string[];
   backendConfigs: Record<string, Record<string, unknown>>;
+  // Hermes-session isolation: when true AND the request carries an explicit
+  // `x-omniroute-session-id` header, memory retrieval scopes to that session
+  // instead of pooling every session under the owning API key. Off by default —
+  // apiKey-pooled retrieval remains the existing, documented behavior
+  // (docs/frameworks/MEMORY.md) for installs that rely on a shared memory pool
+  // across sessions under one key. See toMemoryRetrievalConfig().
+  sessionScopeEnabled: boolean;
 }
 
 export const DEFAULT_MEMORY_SETTINGS: MemorySettings = {
@@ -49,6 +56,7 @@ export const DEFAULT_MEMORY_SETTINGS: MemorySettings = {
   primaryBackend: "sqlite",
   fallbackBackends: [],
   backendConfigs: {},
+  sessionScopeEnabled: false,
 };
 
 let cachedMemorySettings: MemorySettings | null = null;
@@ -151,6 +159,10 @@ export function normalizeMemorySettings(rawSettings: Record<string, unknown> = {
       rawSettings.memoryBackendConfigs !== null
         ? (rawSettings.memoryBackendConfigs as Record<string, Record<string, unknown>>)
         : DEFAULT_MEMORY_SETTINGS.backendConfigs,
+    sessionScopeEnabled: toBoolean(
+      rawSettings.memorySessionScopeEnabled,
+      DEFAULT_MEMORY_SETTINGS.sessionScopeEnabled
+    ),
   };
 }
 
@@ -185,25 +197,44 @@ export function toMemorySettingsUpdates(
   if (settings.fallbackBackends !== undefined)
     updates.memoryFallbackBackends = settings.fallbackBackends;
   if (settings.backendConfigs !== undefined) updates.memoryBackendConfigs = settings.backendConfigs;
+  if (settings.sessionScopeEnabled !== undefined)
+    updates.memorySessionScopeEnabled = settings.sessionScopeEnabled;
 
   return updates;
 }
 
 export function toMemoryRetrievalConfig(
   settings: MemorySettings,
-  extra: { query?: string } = {}
-): Partial<MemoryConfig> & { query?: string } {
+  extra: { query?: string; sessionId?: string | null } = {}
+): Partial<MemoryConfig> & { query?: string; sessionId?: string } {
   const enabled = settings.enabled && settings.maxTokens > 0;
 
-  const config: Partial<MemoryConfig> & { query?: string } = {
+  // Session isolation: two Hermes projects/conversations sharing one API key must
+  // not see each other's saved memories. `scope: "apiKey"` (the long-standing
+  // default, documented in docs/frameworks/MEMORY.md) pools every session's
+  // memories under the owning key. Retrieval only narrows to `scope: "session"`
+  // when the operator has explicitly opted in AND the client sent a real,
+  // stable session identifier — falling back to the existing pooled behavior
+  // when no session id is available avoids ever making retrieval silently
+  // return nothing (a per-request-unique id would never match anything).
+  const useSessionScope =
+    settings.sessionScopeEnabled &&
+    typeof extra.sessionId === "string" &&
+    extra.sessionId.trim().length > 0;
+
+  const config: Partial<MemoryConfig> & { query?: string; sessionId?: string } = {
     enabled,
     maxTokens: enabled ? settings.maxTokens : 0,
     retrievalStrategy: settings.strategy === "recent" ? "exact" : settings.strategy,
     autoSummarize: false,
     persistAcrossModels: false,
     retentionDays: settings.retentionDays,
-    scope: "apiKey",
+    scope: useSessionScope ? "session" : "apiKey",
   };
+
+  if (useSessionScope) {
+    config.sessionId = extra.sessionId as string;
+  }
 
   // Plan 21 FAIL #1 fix: forward the last user message as `query` so that
   // semantic / hybrid strategies actually exercise the vector store in the

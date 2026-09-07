@@ -1310,6 +1310,12 @@ export async function handleChatCore({
   const injectionResult = await injectMemoryAndSkills({
     body,
     memoryOwnerId,
+    // Scope memory retrieval to this conversation (opt-in via
+    // memorySettings.sessionScopeEnabled) using the same client-supplied session id
+    // already used to scope memory *writes* (pipelineSessionId's explicit-header half,
+    // computed above at line ~1053) — closes the gap where two Hermes projects sharing
+    // one API key could otherwise see each other's saved memories.
+    sessionId: explicitSessionIdHeader,
     provider,
     effectiveModel,
     sourceFormat,

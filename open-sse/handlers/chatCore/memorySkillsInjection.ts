@@ -45,6 +45,7 @@ export function getSkillsProviderForFormat(
 export async function injectMemoryAndSkills({
   body,
   memoryOwnerId,
+  sessionId,
   provider,
   effectiveModel,
   sourceFormat,
@@ -54,6 +55,10 @@ export async function injectMemoryAndSkills({
 }: {
   body: Record<string, unknown>;
   memoryOwnerId: string | null;
+  // Explicit client-provided session id (x-omniroute-session-id), used to scope memory
+  // retrieval to one Hermes conversation instead of pooling every session under the
+  // owning API key, when memorySettings.sessionScopeEnabled is on. See toMemoryRetrievalConfig().
+  sessionId?: string | null;
   provider: string;
   effectiveModel: string;
   sourceFormat: string;
@@ -137,7 +142,7 @@ export async function injectMemoryAndSkills({
 
       const memories = await retrieveMemories(
         memoryOwnerId,
-        toMemoryRetrievalConfig(memorySettings, { query: lastUserQuery })
+        toMemoryRetrievalConfig(memorySettings, { query: lastUserQuery, sessionId })
       );
       if (memories.length > 0) {
         // #3890: when the client uses prompt caching (cache_control breakpoints), inject
