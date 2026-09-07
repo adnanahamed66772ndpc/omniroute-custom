@@ -942,3 +942,18 @@ export function getProactiveCompressionRatio(): number {
   proactiveRatioCache = { value: ratio, readAt: now };
   return ratio;
 }
+
+export async function setProactiveCompressionRatio(thresholdRatio: number): Promise<void> {
+  const clamped = Math.min(
+    Math.max(thresholdRatio, PROACTIVE_COMPRESSION_RATIO_MIN),
+    PROACTIVE_COMPRESSION_RATIO_MAX
+  );
+  const db = getDbInstance();
+  db.prepare("INSERT OR REPLACE INTO key_value (namespace, key, value) VALUES (?, ?, ?)").run(
+    NAMESPACE,
+    "proactiveConfig",
+    JSON.stringify({ thresholdRatio: clamped })
+  );
+  proactiveRatioCache = null;
+  invalidateDbCache();
+}

@@ -106,6 +106,18 @@ export const languageConfigSchema = z
   })
   .strict();
 
+// Proactive-compression threshold ratio (src/lib/db/compression.ts
+// getProactiveCompressionRatio/setProactiveCompressionRatio). The value has been
+// DB-backed and hot-reloadable since the livewell backport branch, but had no
+// settings route until now — an operator could not tune "how far into the
+// context window before proactive compaction triggers" without a raw DB write.
+// Bounds mirror PROACTIVE_COMPRESSION_RATIO_MIN/MAX in compression.ts.
+export const proactiveCompressionConfigSchema = z
+  .object({
+    thresholdRatio: z.number().min(0.1).max(0.99).optional(),
+  })
+  .strict();
+
 // Context Editing is a provider-delegated compression mode (Claude/Anthropic only):
 // the provider clears old tool-use blocks server-side. This config only carries the
 // on/off flag; the request-time header/body injection is a separate slice.
