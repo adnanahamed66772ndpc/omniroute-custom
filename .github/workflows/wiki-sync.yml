@@ -11,17 +11,21 @@ name: Wiki Sync
 # so blind overwrite would regress the wiki. Full content parity (--update-existing) is
 # gated on regenerating those sources first.
 
+# Disabled on automatic triggers for this fork (omniroute-custom): this repo's
+# GitHub wiki isn't initialized/synced from upstream's. Kept as workflow_dispatch
+# so it can be re-enabled (restore the push: trigger below) if this fork ever
+# wants its own wiki. See CUSTOM_CHANGES.md.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "docs/**"
-      - "README.md"
-      - "AGENTS.md"
-      - "src/shared/constants/routingStrategies.ts"
-      - "config/i18n.json"
-      - "open-sse/mcp-server/server.ts"
-      - "scripts/docs/sync-wiki.mjs"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "docs/**"
+  #     - "README.md"
+  #     - "AGENTS.md"
+  #     - "src/shared/constants/routingStrategies.ts"
+  #     - "config/i18n.json"
+  #     - "open-sse/mcp-server/server.ts"
+  #     - "scripts/docs/sync-wiki.mjs"
   workflow_dispatch:
 
 permissions:

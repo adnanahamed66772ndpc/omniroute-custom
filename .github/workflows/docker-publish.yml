@@ -1,19 +1,24 @@
 name: Publish to Docker Hub
 
+# Disabled on automatic triggers for this fork (omniroute-custom): it needs
+# DOCKERHUB_USERNAME/DOCKERHUB_TOKEN secrets that only apply to the upstream
+# project's own Docker Hub namespace. Kept as workflow_dispatch so it can be
+# re-enabled (restore the push:/release: triggers below) once this fork's own
+# secrets are configured, if ever wanted. See CUSTOM_CHANGES.md.
 on:
-  push:
-    branches:
-      - main
-      - "release/v*"
-    tags:
-      - "v*"
-    paths-ignore:
-      - ".github/workflows/**"
+  # push:
+  #   branches:
+  #     - main
+  #     - "release/v*"
+  #   tags:
+  #     - "v*"
+  #   paths-ignore:
+  #     - ".github/workflows/**"
   # Use 'released' instead of 'published' so editing/re-publishing old releases
   # does NOT re-trigger this workflow. 'released' fires only on the initial
   # release publication (and pre-release → release transition).
-  release:
-    types: [released]
+  # release:
+  #   types: [released]
   workflow_dispatch:
     inputs:
       version:

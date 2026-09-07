@@ -20,24 +20,30 @@ name: Release-Green (continuous)
 # real defects (typecheck / lint errors / unit / vitest / db-rules / public-creds /
 # package-artifact) flip the issue open.
 
+# Disabled on automatic push/schedule triggers for this fork (omniroute-custom):
+# its whole purpose is opening/updating a tracking issue for base-red hard
+# failures on upstream's exact multi-release-branch model — not meaningful for a
+# single-branch personal fork, and would otherwise spam issues about upstream's
+# own known pre-existing red state (see diegosouzapw/OmniRoute#12732). Kept as
+# workflow_dispatch. See CUSTOM_CHANGES.md.
 on:
-  push:
-    branches: ["release/v*", "main"]
-    paths:
-      - "src/**"
-      - "open-sse/**"
-      - "bin/**"
-      - "electron/**"
-      - "scripts/**"
-      - "tests/**"
-      - "config/**"
-      - "package.json"
-      - "package-lock.json"
-      - "tsconfig*.json"
-  schedule:
-    - cron: "23 5 * * *" # full sweep — off-peak, distinct from other nightlies
-    - cron: "23 12 * * *" # full sweep — midday (WS5.1: 3×/day instead of 1×)
-    - cron: "23 18 * * *" # full sweep — evening
+  # push:
+  #   branches: ["release/v*", "main"]
+  #   paths:
+  #     - "src/**"
+  #     - "open-sse/**"
+  #     - "bin/**"
+  #     - "electron/**"
+  #     - "scripts/**"
+  #     - "tests/**"
+  #     - "config/**"
+  #     - "package.json"
+  #     - "package-lock.json"
+  #     - "tsconfig*.json"
+  # schedule:
+  #   - cron: "23 5 * * *" # full sweep — off-peak, distinct from other nightlies
+  #   - cron: "23 12 * * *" # full sweep — midday (WS5.1: 3×/day instead of 1×)
+  #   - cron: "23 18 * * *" # full sweep — evening
   workflow_dispatch:
     inputs:
       branch:
