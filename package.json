@@ -1,7 +1,7 @@
 {
   "name": "omniroute",
   "version": "3.8.51",
-  "description": "Unified AI router with 356 providers, RTK+Caveman compression, auto fallback, MCP/A2A, desktop, PWA, and OpenAI-compatible APIs.",
+  "description": "OmniRoute Custom — a customized distribution of OmniRoute (unified AI router with 356 providers, RTK+Caveman compression, auto fallback, MCP/A2A, desktop, PWA, and OpenAI-compatible APIs). Based on diegosouzapw/OmniRoute.",
   "type": "module",
   "bin": {
     "omniroute": "bin/omniroute.mjs",
@@ -86,7 +86,7 @@
   "author": "diegosouzapw",
   "repository": {
     "type": "git",
-    "url": "https://github.com/diegosouzapw/OmniRoute"
+    "url": "https://github.com/adnanahamed66772ndpc/omniroute-custom"
   },
   "homepage": "https://omniroute.online",
   "scripts": {

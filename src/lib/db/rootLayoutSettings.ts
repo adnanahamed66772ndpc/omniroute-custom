@@ -21,7 +21,10 @@ const ROOT_LAYOUT_SETTING_KEYS = [
 const ROOT_LAYOUT_SETTING_KEY_SET = new Set<string>(ROOT_LAYOUT_SETTING_KEYS);
 
 const DEFAULT_ROOT_LAYOUT_SETTINGS: RootLayoutSettings = {
-  instanceName: "OmniRoute",
+  // Operator-overridable via Settings — see CUSTOM_CHANGES.md for the rebrand this default
+  // reflects. Changing it here only affects new/reset installs; existing installs keep
+  // whatever instanceName is already stored.
+  instanceName: "OmniRoute Custom",
   customFaviconUrl: "",
   customFaviconBase64: "",
 };

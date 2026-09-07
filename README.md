@@ -1,3 +1,8 @@
+> **OmniRoute Custom** is a customized distribution based on **[OmniRoute](https://github.com/diegosouzapw/OmniRoute)** by
+> [diegosouzapw](https://github.com/diegosouzapw) and the OmniRoute contributors. It is **not** the official OmniRoute
+> project — see [Upstream / Credits](#upstream--credits) below for the full attribution and how this fork differs
+> ([CUSTOM_CHANGES.md](CUSTOM_CHANGES.md)).
+
 <div align="center">
 
 <img src="./docs/screenshots/MainOmniRoute.png" alt="OmniRoute Dashboard" width="820"/>
@@ -5,7 +10,7 @@
 <br/>
 <br/>
 
-# 🚀 OmniRoute — The Free AI Gateway
+# 🚀 OmniRoute Custom — The Free AI Gateway
 
 <img src="./docs/diagrams/readme-hero.svg" width="100%" alt="OmniRoute — Never stop coding. Every AI tool → 356 providers — 150+ free — through one endpoint. Claude Code, Codex, Cursor, Cline, Copilot & Antigravity into FREE Claude / GPT / Gemini with auto-fallback. RTK + Caveman stacked compression saves 15–95% tokens (~89% avg) — never hit limits. 356 AI providers · 150+ free tiers · ~1.47B free tokens/mo · 19 routing strategies · $0 to start."/>
 
@@ -54,6 +59,23 @@
 [![Website](https://img.shields.io/badge/Website-omniroute.online-blue?logo=google-chrome&logoColor=white)](https://omniroute.online)
 
 **Questions, provider tips, roadmap & support → [Discord](https://discord.gg/U47eFqAXCn) · [Telegram](https://t.me/omnirouteOficial) · WhatsApp [🌍 Global](https://chat.whatsapp.com/FvuCbrpZmQ6I85n2vW5QIC?s=cl&p=a&mlu=4) / [🇧🇷 Brasil](https://chat.whatsapp.com/KWgatljAjmbELQory59Oti?s=cl&p=a&mlu=4) / [Portal](https://portal.sthub.com.br/communities/groups/st-hub/channels/Omniroute-World-8kRjmK)**
+
+<br/>
+
+## Upstream / Credits
+
+This project is a customized derivative of **OmniRoute**.
+
+**Original project:** [`diegosouzapw/OmniRoute`](https://github.com/diegosouzapw/OmniRoute)
+
+Based on OmniRoute by [diegosouzapw](https://github.com/diegosouzapw) and the OmniRoute contributors — all credit for
+the original OmniRoute project, its architecture, and the vast majority of its functionality belongs to them. For
+the original project's releases, community, and support channels, use the links above (Discord, Telegram, GitHub) —
+they point at the upstream project's real community.
+
+This repository (`omniroute-custom`) contains additional modifications, optimizations, configuration changes, and
+custom features maintained separately from upstream. See **[CUSTOM_CHANGES.md](CUSTOM_CHANGES.md)** for what's
+different and how to pull in future upstream updates. Licensed under the same [MIT License](LICENSE) as upstream.
 
 <br/>
 

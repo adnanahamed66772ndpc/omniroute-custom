@@ -206,9 +206,9 @@ RUN --mount=type=cache,id=s/92ca8a61-c1ba-421f-a389-d48ac7258c2d-next-cache,targ
 FROM base AS runner-base
 
 LABEL org.opencontainers.image.title="omniroute" \
-  org.opencontainers.image.description="Unified AI proxy — route any LLM through one endpoint" \
-  org.opencontainers.image.url="https://omniroute.online" \
-  org.opencontainers.image.source="https://github.com/diegosouzapw/OmniRoute" \
+  org.opencontainers.image.description="OmniRoute Custom — unified AI proxy, customized distribution based on OmniRoute (https://github.com/diegosouzapw/OmniRoute)" \
+  org.opencontainers.image.url="https://github.com/adnanahamed66772ndpc/omniroute-custom" \
+  org.opencontainers.image.source="https://github.com/adnanahamed66772ndpc/omniroute-custom" \
   org.opencontainers.image.licenses="MIT"
 
 ENV NODE_ENV=production

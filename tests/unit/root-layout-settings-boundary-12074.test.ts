@@ -64,7 +64,7 @@ test("root layout settings reader does not initialize the database", async () =>
   process.env.INITIAL_PASSWORD = "must-not-trigger-startup";
 
   assert.deepEqual(await getRootLayoutSettings(), {
-    instanceName: "OmniRoute",
+    instanceName: "OmniRoute Custom",
     customFaviconUrl: "",
     customFaviconBase64: "",
   });
@@ -97,7 +97,7 @@ test("root layout settings reader is read-only and falls back safely", async () 
   ).run("not-json");
 
   assert.deepEqual(await getRootLayoutSettings(), {
-    instanceName: "OmniRoute",
+    instanceName: "OmniRoute Custom",
     customFaviconUrl: "",
     customFaviconBase64: "",
   });
