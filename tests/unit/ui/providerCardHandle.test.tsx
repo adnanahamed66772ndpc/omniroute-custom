@@ -6,7 +6,7 @@
  * on keeping tests in tests/unit/ui/ (both vitest configs discover it here).
  */
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ProviderCard, {
@@ -37,9 +37,21 @@ if (typeof Element.prototype.animate === "undefined") {
 describe("ProviderCardHandle imperative API", () => {
   let container: HTMLDivElement | null = null;
   let handle: ProviderCardHandle | null = null;
+  let root: Root | null = null;
 
   afterEach(() => {
     handle = null;
+    // Vitest 5 tears down the jsdom environment more eagerly than vitest 4 did —
+    // an un-unmounted React root can still have scheduler work pending
+    // (performWorkOnRootViaSchedulerTask), which then throws "window is not
+    // defined" once that teardown has happened. unmount() synchronously flushes
+    // that work while the environment is still alive.
+    if (root) {
+      act(() => {
+        root!.unmount();
+      });
+      root = null;
+    }
     if (container) {
       document.body.removeChild(container);
       container = null;
@@ -52,7 +64,7 @@ describe("ProviderCardHandle imperative API", () => {
   function renderAndCapture() {
     container = document.createElement("div");
     document.body.appendChild(container);
-    const root = createRoot(container);
+    root = createRoot(container);
     act(() => {
       root.render(
         <ProviderCard
@@ -114,7 +126,7 @@ describe("ProviderCardHandle imperative API", () => {
   it("getProviderId returns the correct id for a different provider", () => {
     container = document.createElement("div");
     document.body.appendChild(container);
-    const root = createRoot(container);
+    root = createRoot(container);
     let h: ProviderCardHandle | null = null;
     act(() => {
       root.render(

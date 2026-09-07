@@ -8,7 +8,7 @@
  */
 import React from "react";
 import { act } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import ProviderPageHeader from "@/app/(dashboard)/dashboard/providers/[id]/components/ProviderPageHeader";
 
@@ -18,8 +18,19 @@ const t = (key: string) => key;
 
 describe("ProviderPageHeader — Kimi partner-link note", () => {
   let container: HTMLDivElement | null = null;
+  let root: Root | null = null;
 
   afterEach(() => {
+    // Vitest 5 tears down the jsdom environment more eagerly than vitest 4 did —
+    // an un-unmounted React root can still have scheduler work pending, which
+    // then throws "window is not defined" once that teardown has happened.
+    // unmount() synchronously flushes that work while the environment is alive.
+    if (root) {
+      act(() => {
+        root!.unmount();
+      });
+      root = null;
+    }
     if (container) {
       document.body.removeChild(container);
       container = null;
@@ -29,7 +40,7 @@ describe("ProviderPageHeader — Kimi partner-link note", () => {
   function renderHeader(id: string, name: string, website: string) {
     container = document.createElement("div");
     document.body.appendChild(container);
-    const root = createRoot(container);
+    root = createRoot(container);
     act(() => {
       root.render(
         <ProviderPageHeader
